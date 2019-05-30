@@ -1,0 +1,3 @@
+%{
+  "manifold": {:hex, :manifold, "1.2.0", "09d85d0927ff64e73dd22ab920ede3fe60aa36d894496f512e0cfddacb569be5", [:mix], [], "hexpm"},
+}
