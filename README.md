@@ -1,6 +1,12 @@
-# Logic
+# LogicSim
 
-**TODO: Add description**
+Parallel and asynchronous logic simulator.
+
+*TODO:*
+- implement more complex constructs
+- build simple DSL to make writing simulations easier
+- figure out how to take multiple inputs
+
 
 ## Installation
 
