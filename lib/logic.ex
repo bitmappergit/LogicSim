@@ -1,3 +1,5 @@
+use Bitwise
+
 defmodule Logic do
   def xor(a, b) do
     case {a, b} do
@@ -20,43 +22,43 @@ defmodule Logic do
       :and ->
         receive do
           {a, b} ->
-            send(outputNode, a and b)
+            send(outputNode, a &&& b)
             gate(:and, inputNode, outputNode)
         end
       :nand ->
         receive do
           {a, b} ->
-            send(outputNode, not(a and b))
+            send(outputNode, a &&& b |> bnot)
             gate(:nand, inputNode, outputNode)
         end
       :or ->
         receive do
           {a, b} ->
-            send(outputNode, a or b)
+            send(outputNode, a ||| b)
             gate(:or, inputNode, outputNode)
         end
       :nor ->
         receive do
           {a, b} ->
-            send(outputNode, not(a or b))
+            send(outputNode, a ||| b |> bnot)
             gate(:nor, inputNode, outputNode)
         end
       :xor ->
         receive do
           {a, b} ->
-            send(outputNode, xor(a, b))
+            send(outputNode, a ^^^ b)
             gate(:xor, inputNode, outputNode)
         end
       :xnor ->
         receive do
           {a, b} ->
-            send(outputNode, not(xor(a, b)))
+            send(outputNode, a ^^^ b |> bnot)
             gate(:xnor, inputNode, outputNode)
         end
       :not ->
         receive do
           input ->
-            send(outputNode, not(input))
+            send(outputNode, ~~~input)
             gate(:not, inputNode, outputNode)
         end
       :buffer ->
@@ -97,16 +99,16 @@ defmodule Logic do
     node2 = spawn(Logic, :node, [:testnode2, []])
     send(node2, {:connectItem, self()})
     _gate1 = spawnGate(:and, node1, node2)
-    send(node1, {true, false})
+    send(node1, {1, 0})
     receive do
       input ->
-        IO.puts("\nTesting AND gate process with inputs {true, false} into node1, connected to gate1 which is outputting to node2:")
+        IO.puts("\nTesting AND gate process with inputs {1, 0} into node1, connected to gate1 which is outputting to node2:")
         IO.puts(input)
     end
-    send(node1, {true, true})
+    send(node1, {1, 1})
     receive do
       input ->
-        IO.puts("\nTesting AND gate process with inputs {true, true} into node1, connected to gate1 which is outputting to node2:")
+        IO.puts("\nTesting AND gate process with inputs {1, 1} into node1, connected to gate1 which is outputting to node2:")
         IO.puts(input)
     end
   end
