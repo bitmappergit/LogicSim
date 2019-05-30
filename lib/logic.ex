@@ -1,14 +1,6 @@
 use Bitwise
 
 defmodule Logic do
-  def xor(a, b) do
-    case {a, b} do
-      {true, true} -> false
-      {false, false} -> false
-      {_, _} -> true
-    end
-  end
-
   def spawnGate(gateType, inputNode, outputNode) do
     tempGate = spawn(Logic, :gate, [gateType])
     send(inputNode, {:connectItem, tempGate})
