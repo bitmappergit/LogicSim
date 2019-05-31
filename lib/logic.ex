@@ -1,11 +1,20 @@
 use Bitwise
 
+### TODO
+## core:
+# create splitter to split one bus (a list sent over one connection) into multiple individual connections
+# convert code to use recursive logic functions in Logic.Recursive (will most likely make wrapper functions)
 defmodule Logic do
   def spawnGate(gateType, inputNode, outputNode) do
-    tempGate = spawn(Logic, :gate, [gateType])
+    tempGate = spawn(
+      Logic,
+      :gate,
+      [gateType])
+
     send(inputNode, {:connectItem, tempGate})
     send(outputNode, {:connectItem, tempGate})
     send(tempGate, {inputNode, outputNode})
+
     tempGate
   end
 
@@ -87,20 +96,39 @@ defmodule Logic do
   end
 
   def test do
-    node1 = spawn(Logic, :node, [:testnode1, []])
-    node2 = spawn(Logic, :node, [:testnode2, []])
+    node1 = spawn(
+      Logic,
+      :node,
+      [:testnode1, []])
+
+    node2 = spawn(
+      Logic,
+      :node,
+      [:testnode2,[]])
+
     send(node2, {:connectItem, self()})
+
+    #the gate is never actually referred to directly and must be prefixed with an underscore
+    #this is because connection is handled by the spawnGate/3 function
     _gate1 = spawnGate(:and, node1, node2)
+
     send(node1, {1, 0})
     receive do
       input ->
-        IO.puts("\nTesting AND gate process with inputs {1, 0} into node1, connected to gate1 which is outputting to node2:")
+        IO.puts("""
+          Testing AND gate process with inputs {1, 0} into node1,\
+          connected to gate1 which is outputting to node2:
+          """)
         IO.puts(input)
     end
+
     send(node1, {1, 1})
     receive do
       input ->
-        IO.puts("\nTesting AND gate process with inputs {1, 1} into node1, connected to gate1 which is outputting to node2:")
+        IO.puts("""
+          Testing AND gate process with inputs {1, 1} into node1,\
+          connected to gate1 which is outputting to node2:
+          """)
         IO.puts(input)
     end
   end
