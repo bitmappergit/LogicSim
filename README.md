@@ -1,6 +1,6 @@
 # LogicSim
 
-Parallel and asynchronous logic simulator.
+logic simulator.
 
 *TODO:*
 - implement more complex constructs
